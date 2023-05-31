@@ -1,5 +1,5 @@
 import { Book } from "./book.js";
-import { Reader } from './reader.js'
+// import { Reader } from './reader.js'
 const log = console.log;
 
 const url = 'https://www.dbooks.org/api/recent';
@@ -17,13 +17,25 @@ xhr.onreadystatechange = (ev) => {
     if(xhr.status === 200){
         if(xhr.readyState ===xhr.DONE){
             let result = JSON.parse(xhr.response);
-            log(result);
+            log(result.books);
+
+            let divShelf = document.querySelector('.trend-books');
+
+            for(let x of result.books){
+                let book = new Book(x);
+
+                divShelf.append(book.view);
+            }
+
+            
         }
     }
 }
 
 xhr.open('get', url, true);
 xhr.send();
+
+
 
 class Library {
     #userData = [];

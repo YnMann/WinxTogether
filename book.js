@@ -21,7 +21,9 @@ export class Book {
         let subtitle = document.createElement('p');
         subtitle.textContent = this.subtitle;
         let onStock = document.createElement('p');
-        returnMark.textContent = this.onStock;
+        if(this.onStock){
+            onStock.textContent = "Книга доступна"
+        } else onStock.textContent = "Книга не доступна"
         //Все вставляю
         this.view.append(img);
         this.view.append(title);
