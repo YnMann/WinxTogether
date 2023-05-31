@@ -7,8 +7,9 @@ class Library {
     #userData = [];           //Data Где будут храниться новые юзеры;
     #giveOutBookData = [];    //Data или список в котором будут храниться книги, отсутствующие "взятые из библиотеки"
     constructor(){
-        this.newBooksUrl = 'https://www.dbooks.org/api/recent';  //Url для получения трендовых книг/новинок
-        this.searchUrl = 'https://www.dbooks.org/api/search/'    //Url для поиска
+        this.newBooksUrl = 'https://www.dbooks.org/api/recent';       //Url для получения трендовых книг/новинок
+        this.searchUrl = 'https://www.dbooks.org/api/search/'         //Url для поиска
+        this.searchBookByIdUrl = 'https://www.dbooks.org/api/book/';  //Url для поиска, нужный для метода readBook
         this.trendyBooksShelf = null;      //Див/Полка с трендовыми книгами
         this.searchResult = null;          //Див/Полка с результатлм поиска
         this.reader = null;                //Пользователь на момент использования
@@ -33,8 +34,27 @@ class Library {
         this.#userData.push(user);
     }
 
+    //Метод, для получения/чтения книги
+    readBook(book){
+        let response =  fetch(this.searchBookByIdUrl + book.id)
+                        .then(response => response.json())  //представляю в виде джейсона
+                        .then(response => {
+                            log(response);
+                            let givenBook = new Book(response);
+                            //Помечаю книгу как выданную
+                            givenBook.giveOutBook(this.reader.id);
+                            //добавляю книгу читателю
+                            // передаю ее чтобы потом можно было отображать в списке читателя)
+                            this.reader.addBook(givenBook);
+                            //Пушу книгу в дату со списком недоступных книг
+                            this.#giveOutBookData.push(givenBook);
+                        });
+
+
+    }
+
     //Метод для возврата книги
-    //надо подклюсить на кнопку Сдать
+    //надо подключить на кнопку Сдать
     return(title, authors){
         //У нас есть data с книгами которые недоступны/используются читателями.
         //Делаем перебор ДАТЫ чтобы просмотреть каждую книгу и сравнить с введенным названием и авторами
@@ -119,4 +139,14 @@ let divResult = document.querySelector('.search-result');
 searchButton.addEventListener('click', () => {
     let text = inputSearch.value;
     library.search(text, divResult);
+})
+
+//НЕ РАБОТАЕТ????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+let books = document.querySelectorAll('.trend-book');
+log(books);
+books.forEach(book => {
+    book.addEventListener('click', () => {
+        log(book);
+        library.readBook(book);
+    })
 })

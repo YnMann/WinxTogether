@@ -9,7 +9,7 @@ export class Book {
         this.returnDate = null;
         //Создаю элемент книги
         this.view = document.createElement('div');
-        this.view.id = this.title;
+        this.view.id = this.id;
         this.view.className = "trend-book";
         //вставляю картинку
         let img = document.createElement('img');
