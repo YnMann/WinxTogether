@@ -31,8 +31,8 @@ xhrTrendBooks.onreadystatechange = (ev) => {
     }
 }
 
-xhr.open('get', url, true);
-xhr.send();
+xhrTrendBooks.open('get', url, true);
+xhrTrendBooks.send();
 
 let inputSearch = document.querySelector('.search-book');
 
@@ -42,7 +42,7 @@ inputSearch.addEventListener('keyup', () => {
     let text = inputSearch.value;
     log(text);
 
-    xhrSearch.open('get', 'https://www.dbooks.org/api/search/' + ${text},  true);
+    xhrSearch.open('get', `https://www.dbooks.org/api/search/${text}`,  true);
     xhrSearch.send();
 });
 
