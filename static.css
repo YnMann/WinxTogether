@@ -7,11 +7,11 @@
     height: 1200px;
     margin: 0 auto;
     display: flex;
-
+    justify-content: space-between;
 }
 
 .left-menu {
-    width: 17%;
+    width: 15%;
     height: 1200px;
     /* background-color: blanchedalmond; */
     display: flex;
@@ -30,7 +30,7 @@
     transition: 200ms;
 }
 
-.left-menu div:nth-child(1){
+.left-menu div:nth-child(1) {
     margin-top: 20px;
 }
 
@@ -40,20 +40,21 @@
 
 .vivod {
     width: 83%;
+
 }
 
 .vivod-container {
-    width: 90%;
+    width: 100%;
     margin: 0 auto;
 }
 
 .trend-books {
-
-    height: 250px;
     margin: 0 auto;
-
-    padding-bottom: 20px;
+    display: flex;
+    padding-bottom: 40px;
     border-bottom: 2px grey dashed;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
 }
 
 #search-book {
@@ -63,13 +64,28 @@
 }
 
 .winx {
-    width:1200px;
+    width: 1200px;
     margin: 0 auto;
     margin-bottom: 15px;
-    transition:300ms;
+    transition: 300ms;
 }
 
-.winx:hover{
+.winx:hover {
     transform: translateX(20px);
 }
 
+.trend-book {
+    width: 200px;
+    height: 200px;
+    margin: 20px;
+}
+
+.trend-book img {
+    width: 60px;
+    height: 60px;
+
+}
+
+.trend-book h2{  
+    font-size: 20px;
+}
