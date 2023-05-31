@@ -1,5 +1,5 @@
 export class Book {
-    constructor(data){
+    constructor(data) {
         this.id = data.id;
         this.title = data.title;
         this.subtitle = data.subtitle;
@@ -12,6 +12,7 @@ export class Book {
         //Создаю элемент книги
         this.view = document.createElement('div');
         this.view.id = this.title;
+        this.view.className = "trend-book";
         //вставляю картинку
         let img = document.createElement('img');
         img.src = this.imageSrc;
@@ -21,7 +22,7 @@ export class Book {
         let subtitle = document.createElement('p');
         subtitle.textContent = this.subtitle;
         let onStock = document.createElement('p');
-        if(this.onStock){
+        if (this.onStock) {
             onStock.textContent = "Книга доступна"
         } else onStock.textContent = "Книга не доступна"
         //Все вставляю
@@ -31,7 +32,7 @@ export class Book {
         this.view.append(onStock);
     }
 
-    giveOutBook(reader){
+    giveOutBook(reader) {
         this.readerUrl = reader;
         this.returnDate = new Date(); // + 7 дней
         this.returnDate.setDate(getDate)
@@ -39,14 +40,14 @@ export class Book {
         this.sync();
     }
 
-    returnBook(){
+    returnBook() {
         this.readerUrl = '';
         this.returnDate = null;
         this.onStock = true;
         this.sync();
     }
 
-    sync(){
+    sync() {
         returnMark.textContent = this.onStock;
     }
 
