@@ -54,37 +54,50 @@ class Library {
         }
     }
 
+    //метод для получения и отображения новинок, получает в себя див куда будут вноситься полученные книги
     newBooks(divShelf){
+        //присваиваю свойству в классе полученный элемент(див)
+        //Пока не знаю, нужен или нет... Ощущение как будто в библиотеке синхронизацию тоже придется делать
         this.trendyBooksShelf = divShelf;
+        //Делаю запрос на новинки через newBooksUrl
         let response =  fetch(this.newBooksUrl)
-                        .then(response => response.json())
+                        .then(response => response.json())  //представляю в виде джейсона
                         .then(response => {
                             log(response.books);
+                            //отображаю 10 новинок!
+                            // Никита, если нужно поменять колличесто, меняй
                             for(let i = 0; i < 10; i++){
-                              let book = new Book(response.books[i]);
-                              this.trendyBooksShelf.append(book.view);
+                                //Каждую книгу создаю при помощи класса Book внося в него его дату
+                                let book = new Book(response.books[i]);
+                                //свойство book.view хранит див с полным отображением книги, вставляю книгу на "полку" с новинками
+                                this.trendyBooksShelf.append(book.view);
                             }
                         });
     }
 
+    //Метод поиска книги
+    //Получет текст как название и див куда будет отображаться результат поиска
     search(text, divResult){
+        //присваиваю свойству в классе полученный элемент(див)
         this.searchResult = divResult;
+        //При повторном поиске очищаю див от предыдущего результата поиска
         this.searchResult.innerHTML = '';
+        //Делаю запрос поиска через searchUrl
         let response = fetch(this.searchUrl + text)
                         .then(response => response.json())
                         .then(response => {
                             log(response.books)
+                            //Ответ на запрос Python выходит в виде 98 книг, поэтому отображаю пока только 10
+                            //Никита, если нужно поменять колличество, СМЕЛО...
                             for(let i = 0; i < 10; i++){
+                                //Каждую книгу создаю при помощи класса Book внося в него его дату
                                 let book = new Book(response.books[i]);
+                                //свойство book.view хранит див с полным отображением книги, вставляю книгу в див резудьтата поиска
                                 this.searchResult.append(book.view);
                             }
                         });
     }
 }
-
-// const url = 'https://www.dbooks.org/api/recent';
-
-// let response =  fetch(url).then(response => response.json()).then(response => log(response));
 
 let data = {
     fullName: ''
