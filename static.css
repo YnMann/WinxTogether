@@ -1,26 +1,75 @@
-.container{
+* {
+    font-family: Century Gothic;
+}
+
+.container {
     width: 1200px;
     height: 1200px;
     margin: 0 auto;
-    display:flex;
-    background: green;
+    display: flex;
+
 }
 
-.left-menu{
-    width: 200px;
+.left-menu {
+    width: 17%;
     height: 1200px;
-    background-color: blanchedalmond;
+    /* background-color: blanchedalmond; */
     display: flex;
     flex-direction: column;
 }
 
-.left-menu div{
-    width: 200px;
+.left-menu div {
     height: 200px;
-    background-color: blue;
-    border: 1px black solid;
-    margin-bottom: 10px;
+    background-color: #DAA06D;
+    color: white;
+    margin-bottom: 15px;
     text-align: center;
     font-size: 50px;
     line-height: 200px;
+    cursor: pointer;
+    transition: 200ms;
 }
+
+.left-menu div:nth-child(1){
+    margin-top: 20px;
+}
+
+.left-menu div:hover {
+    transform: scale(1.1);
+}
+
+.vivod {
+    width: 83%;
+}
+
+.vivod-container {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.trend-books {
+
+    height: 250px;
+    margin: 0 auto;
+
+    padding-bottom: 20px;
+    border-bottom: 2px grey dashed;
+}
+
+#search-book {
+    width: 50%;
+    margin: 0 auto;
+    height: 25px;
+}
+
+.winx {
+    width:1200px;
+    margin: 0 auto;
+    margin-bottom: 15px;
+    transition:300ms;
+}
+
+.winx:hover{
+    transform: translateX(20px);
+}
+
