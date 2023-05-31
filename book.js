@@ -7,7 +7,6 @@ export class Book {
         this.imageSrc = data.image;
         this.readerUrl = '';
         this.returnDate = null;
-        this.onStock = true;
 
         //Создаю элемент книги
         this.view = document.createElement('div');
@@ -22,7 +21,7 @@ export class Book {
         let subtitle = document.createElement('p');
         subtitle.textContent = this.subtitle;
         let onStock = document.createElement('p');
-        if (this.onStock) {
+        if (this.readerUrl == '') {
             onStock.textContent = "Книга доступна"
         } else onStock.textContent = "Книга не доступна"
         //Все вставляю
@@ -36,7 +35,6 @@ export class Book {
         this.readerUrl = reader;
         this.returnDate = new Date(); // + 7 дней
         this.returnDate.setDate(getDate)
-        this.onStock = false;
         this.sync();
     }
 
