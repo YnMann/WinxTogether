@@ -21,9 +21,10 @@ xhr.onreadystatechange = (ev) => {
 
             let divShelf = document.querySelector('.trend-books');
 
-            for(let x of result.books){
-                let book = new Book(x);
+            for(let i=0 ; i<10; i++){
+                let book = new Book(result.books[i]);
 
+                
                 divShelf.append(book.view);
             }
 
