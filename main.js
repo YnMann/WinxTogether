@@ -10,24 +10,22 @@ const url = 'https://www.dbooks.org/api/recent';
 // }
 
 
-const xhr = new XMLHttpRequest();
+const xhrTrendBooks = new XMLHttpRequest();
 
 
-xhr.onreadystatechange = (ev) => {
-    if(xhr.status === 200){
-        if(xhr.readyState ===xhr.DONE){
-            let result = JSON.parse(xhr.response);
+xhrTrendBooks.onreadystatechange = (ev) => {
+    if(xhrTrendBooks.status === 200){
+        if(xhrTrendBooks.readyState ===xhrTrendBooks.DONE){
+            let result = JSON.parse(xhrTrendBooks.response);
             log(result.books);
 
             let divShelf = document.querySelector('.trend-books');
 
-            for(let x of result.books){
-                let book = new Book(x);
+            for(let i=; i<10;i++ ){
+                let book = new Book(result.books[i]);
 
                 divShelf.append(book.view);
             }
-
-            
         }
     }
 }
@@ -35,6 +33,34 @@ xhr.onreadystatechange = (ev) => {
 xhr.open('get', url, true);
 xhr.send();
 
+let inputSearch = document.querySelector('.search-book');
+
+const xhrSearch = new XMLHttpRequest();
+
+inputSearch.addEventListener('keyup', () => {
+    let text = inputSearch.value;
+    log(text);
+
+    xhrSearch.open('get', 'https://www.dbooks.org/api/search/' + ${text},  true);
+    xhrSearch.send();
+});
+
+xhrSearch.onreadystatechange = (ev) => {
+    if(xhrSearch.status === 200){
+        if(xhrTrenxhrSearchdBooks.readyState ===xhrSearch.DONE){
+            let result = JSON.parse(xhrSearch.response);
+            log(result.books);
+
+            let divResult = document.querySelector('.search-result');
+
+            for(let x of result.books){
+                let book = new Book(x);
+
+                divResult.append(book.view);
+            }
+        }
+    }
+}
 
 
 class Library {
