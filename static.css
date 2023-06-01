@@ -48,13 +48,14 @@
     margin: 0 auto;
 }
 
-.trend-books {
+.trend-books, .search-result {
     margin: 0 auto;
     display: flex;
     padding-bottom: 40px;
     border-bottom: 2px grey dashed;
     flex-wrap: wrap;
     margin-bottom: 20px;
+    justify-content: space-between;
 }
 
 #search-book {
@@ -75,15 +76,20 @@
 }
 
 .trend-book {
-    width: 200px;
+    width: 164px;
     height: 200px;
-    margin: 20px;
+    margin: 3px;
+    font-size: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 10px;
+    text-align: center;
 }
 
 .trend-book img {
-    width: 60px;
-    height: 60px;
-
+    width: 155px;
+    height: 160px;
 }
 
 .trend-book h2{  
@@ -112,6 +118,7 @@
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-around;
 }
 
 .alert h2 {

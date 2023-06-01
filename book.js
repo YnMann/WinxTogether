@@ -22,8 +22,8 @@ export class Book {
         let title = document.createElement('p');
         title.textContent = this.title;
         if(this.readerId === ''){
-            this.view.style.border = '2px solid green';    //зеленая рамка- книга доступна
-        } else this.view.style.border = '2px solid red';   //красная рамка- недоступна
+            this.view.style.border = '3px solid green';    //зеленая рамка- книга доступна
+        } else this.view.style.border = '3px solid red';   //красная рамка- недоступна
         //Все вставляю
         this.view.append(this.imgElement);
         this.view.append(title);
@@ -63,7 +63,7 @@ export class Book {
                         .then(response => {
                             log(response);
                             this.viewDetailedInformation(response);
-                            
+
                             // let givenBook = new Book(response, library);
                             // //Помечаю книгу как выданную
                             // givenBook.giveOutBook(this.reader.id);
@@ -90,7 +90,7 @@ export class Book {
             let tr = document.createElement('tr')
             if(data[i] === this.title || data[i]  === this.id 
                 || data[i]  === this.url || i === 'status'
-                || i === 'subtitle') continue;
+                || i === 'subtitle' || i === 'image') continue;
             else {
                 let titleTd = document.createElement('td');
                 titleTd.textContent = i.slice(0,1).toUpperCase() + i.slice(1);
