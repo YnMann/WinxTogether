@@ -63,6 +63,7 @@ export class Book {
                         .then(response => {
                             log(response);
                             this.viewDetailedInformation(response);
+                            
                             // let givenBook = new Book(response, library);
                             // //Помечаю книгу как выданную
                             // givenBook.giveOutBook(this.reader.id);
@@ -92,9 +93,9 @@ export class Book {
                 || i === 'subtitle') continue;
             else {
                 let titleTd = document.createElement('td');
-                titleTd.textContent = i;
+                titleTd.textContent = i.slice(0,1).toUpperCase() + i.slice(1);
                 let propertyTd = document.createElement('td');
-                propertyTd.textContent = data[i];
+                propertyTd.textContent = data[i].slice(0,1).toUpperCase() + data[i].slice(1);
                 tr.append(titleTd);
                 tr.append(propertyTd);
                 descriptionList.append(tr);
