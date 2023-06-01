@@ -69,15 +69,22 @@ class Library {
                             //отображаю 10 новинок!
                             // Никита, если нужно поменять колличесто, меняй
                             for(let i = 0; i < 10; i++){
-                                //Проверяю есть ли книга у меня в списке выданных
-                                for(let givenBook of this.#giveOutBookData){
-                                    if(response.books[i].id === givenBook.id){
-                                        this.trendyBooksShelf.append(givenBook.view);
-                                    }else {
-                                        //Каждую книгу создаю при помощи класса Book внося в него его дату
-                                        let book = new Book(response.books[i], this);
-                                        //свойство book.view хранит див с полным отображением книги, вставляю книгу на "полку" с новинками
-                                        this.trendyBooksShelf.append(book.view);
+                                if(this.#giveOutBookData.length == 0){
+                                    //Каждую книгу создаю при помощи класса Book внося в него его дату
+                                    let book = new Book(response.books[i], this);
+                                    //свойство book.view хранит див с полным отображением книги, вставляю книгу в див резудьтата поиска
+                                    this.trendyBooksShelf.append(book.view);
+                                }else {
+                                    //Проверяю есть ли книга у меня в списке выданных
+                                    for(let givenBook of this.#giveOutBookData){
+                                        if(response.books[i].id === givenBook.id){
+                                            this.trendyBooksShelf.append(givenBook.view);
+                                        }else {
+                                            //Каждую книгу создаю при помощи класса Book внося в него его дату
+                                            let book = new Book(response.books[i], this);
+                                            //свойство book.view хранит див с полным отображением книги, вставляю книгу на "полку" с новинками
+                                            this.trendyBooksShelf.append(book.view);
+                                        }
                                     }
                                 } 
                             }
@@ -99,17 +106,24 @@ class Library {
                             //Ответ на запрос Python выходит в виде 98 книг, поэтому отображаю пока только 10
                             //Никита, если нужно поменять колличество, СМЕЛО...
                             for(let i = 0; i < 10; i++){
-                                //Проверяю есть ли книга у меня в списке выданных
-                                for(let givenBook of this.#giveOutBookData){
-                                    if(response.books[i].id === givenBook.id){
-                                        this.searchResult.append(givenBook.view);
-                                    }else {
+                                if(this.#giveOutBookData.length === 0){
                                     //Каждую книгу создаю при помощи класса Book внося в него его дату
                                     let book = new Book(response.books[i], this);
                                     //свойство book.view хранит див с полным отображением книги, вставляю книгу в див резудьтата поиска
                                     this.searchResult.append(book.view);
+                                }else {
+                                    //Проверяю есть ли книга у меня в списке выданных
+                                    for(let givenBook of this.#giveOutBookData){
+                                        if(response.books[i].id == givenBook.id){
+                                            this.searchResult.append(givenBook.view);
+                                        }else {
+                                            //Каждую книгу создаю при помощи класса Book внося в него его дату
+                                            let book = new Book(response.books[i], this);
+                                            //свойство book.view хранит див с полным отображением книги, вставляю книгу в див резудьтата поиска
+                                            this.searchResult.append(book.view);
+                                        }
                                     }
-                                    
+                                }
                             }
                         });
     }
