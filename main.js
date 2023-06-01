@@ -9,7 +9,6 @@ class Library {
     constructor(){
         this.newBooksUrl = 'https://www.dbooks.org/api/recent';       //Url для получения трендовых книг/новинок
         this.searchUrl = 'https://www.dbooks.org/api/search/'         //Url для поиска
-        this.searchBookByIdUrl = 'https://www.dbooks.org/api/book/';  //Url для поиска, нужный для метода readBook
         this.trendyBooksShelf = null;      //Див/Полка с трендовыми книгами
         this.searchResult = null;          //Див/Полка с результатлм поиска
         this.reader = null;                //Пользователь на момент использования
@@ -23,11 +22,7 @@ class Library {
     //Надо будет подключить к кнопке Регистрация
     newReader(){
         //Создается юзер
-        //Ерден, есть такая тема! Можно смотреть длину this.#userData и передавать ее в твой класс, чтобы обозначить ID верно
-        //то есть если длина this.#userData = 0
-        //let user = new Reader(this.#userData.length) здесь this.#userData.length = 0;
-        //ты получаешь ноль и присваиваешь его своему свойству this.id = 0 в конструкторе и т.д.
-        let user = new Reader();
+        let user = new Reader(data);
         //После регистрации читатель автоматически входит в библиотеку, становится current читателем
         this.reader = user;
         //Пушится в дату со всеми читателями this.#userData
@@ -36,19 +31,7 @@ class Library {
 
     //Метод, для получения/чтения книги
     readBook(book){
-        let response =  fetch(this.searchBookByIdUrl + book.id)
-                        .then(response => response.json())  //представляю в виде джейсона
-                        .then(response => {
-                            log(response);
-                            let givenBook = new Book(response);
-                            //Помечаю книгу как выданную
-                            givenBook.giveOutBook(this.reader.id);
-                            //добавляю книгу читателю
-                            // передаю ее чтобы потом можно было отображать в списке читателя)
-                            this.reader.addBook(givenBook);
-                            //Пушу книгу в дату со списком недоступных книг
-                            this.#giveOutBookData.push(givenBook);
-                        });
+        this.#giveOutBookData.push(book);
 
 
     }
@@ -88,7 +71,7 @@ class Library {
                             // Никита, если нужно поменять колличесто, меняй
                             for(let i = 0; i < 10; i++){
                                 //Каждую книгу создаю при помощи класса Book внося в него его дату
-                                let book = new Book(response.books[i]);
+                                let book = new Book(response.books[i], this);
                                 //свойство book.view хранит див с полным отображением книги, вставляю книгу на "полку" с новинками
                                 this.trendyBooksShelf.append(book.view);
                             }
@@ -111,7 +94,7 @@ class Library {
                             //Никита, если нужно поменять колличество, СМЕЛО...
                             for(let i = 0; i < 10; i++){
                                 //Каждую книгу создаю при помощи класса Book внося в него его дату
-                                let book = new Book(response.books[i]);
+                                let book = new Book(response.books[i], this);
                                 //свойство book.view хранит див с полным отображением книги, вставляю книгу в див резудьтата поиска
                                 this.searchResult.append(book.view);
                             }

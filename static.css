@@ -89,3 +89,26 @@
 .trend-book h2{  
     font-size: 20px;
 }
+
+.osnova {
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    background-color: #bcbcbccf;
+    opacity: 100%;
+    top: 0;
+    left: 0;
+    padding-top: 2%;
+}
+
+.alert {
+    padding: 50px 15px;
+    border: 2px solid #0a4c7e;
+    border-radius: 10px;
+    color: #294d4e;
+    font-size: 24px;
+    text-align: center;
+    background-color: #84d1d2;
+    width: 400px;
+    margin: 0 auto;
+}
