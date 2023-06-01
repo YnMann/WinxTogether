@@ -33,6 +33,7 @@ export class Book {
 
     //Выдать книгу указанному Читателю через Id 
     giveOutBook(reader) {
+        this.library.readBook(this);
         //Принимаю в метод readerId айди читателя и  устанавливаю его в свойство в книге
         this.readerId = reader.id;
         //Книга выдается на семь дней от дня когда ее взяли

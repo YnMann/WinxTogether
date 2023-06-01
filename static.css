@@ -58,6 +58,14 @@
     justify-content: space-between;
 }
 
+.result {
+    display: none;
+}
+
+.active {
+    display: block;
+}
+
 #search-book {
     width: 50%;
     margin: 0 auto 10px;
@@ -143,5 +151,14 @@ td {
     color:#fff;
     font-size: 17px;
     padding: 10px;
-    background-color: #72c6bb;
+    background-color: #c69c72;
+}
+
+.for-buttons {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.for-buttons button{
+    padding: 10px 100px;
 }

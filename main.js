@@ -1,5 +1,6 @@
 import { Book } from "./book.js";
-import { Reader } from './reader.js'
+import { Reader } from './reader.js';
+// import { Form } from './form.js';
 const log = console.log;
 
 //Класс Библиотека основной, будет отвечать за работу страницы
@@ -33,7 +34,7 @@ class Library {
     //Метод, для получения/чтения книги
     readBook(book){
         this.#giveOutBookData.push(book);
-
+        this.reader.addBook(book);
     }
 
     //Метод для возврата книги
@@ -43,12 +44,9 @@ class Library {
         for(let book of this.#giveOutBookData){
             //Когда находим совпадение
             if(book.title === title && book.authors === authors){
-                //Вызываем метод Возврата у книги, чтобы очистить ее свойства читатель book.readerId 
-                //и день возврата book.returnDatе
-                book.returnBook();
                 //У нашего пользователя также обнуляем свойства? Пока не знаю какие именно
                 //Одним словом Пользователь тоже вернул книгу
-                this.reader.removeBook();
+                this.reader.removeBook(book);
                 //И удаляем книгу из нашей ДАТЫ, где хранится список недоступных книг
                 let index = this.#giveOutBookData.indexOf(book);
                 this.#giveOutBookData.slice(index, 1);
@@ -143,6 +141,23 @@ let data = {
     , phoneNum: ''
     , image: ''
 };
+
+//Работа менюшки
+const divsOnClick = document.querySelectorAll('.left-menu div');
+const divsTarget = document.querySelectorAll('.result');
+//Работа менюшки
+divsOnClick.forEach(menuDiv => {
+    menuDiv.addEventListener('click', () => {
+        const target = menuDiv.dataset.target;
+        divsTarget.forEach(div => {
+            if(div.id === target){
+                div.classList.add('active');
+            } else {
+                div.classList.remove('active');
+            }
+        });
+    });
+});
 
 //Создаю библиотеку по классу Library
 const library = new Library();
