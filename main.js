@@ -1,19 +1,21 @@
 import { Book } from "./book.js";
 import { Reader } from './reader.js';
-// import { Form } from './form.js';
+import { Form } from './form.js';
 const log = console.log;
 
 //Класс Библиотека основной, будет отвечать за работу страницы
 class Library {
-    #userData = [];           //Data Где будут храниться новые юзеры;
-    #giveOutBookData = [];    //Data или список в котором будут храниться книги, отсутствующие "взятые из библиотеки"
+
     constructor(){
+        this.userData = [];                //Data Где будут храниться новые юзеры;
+        this.giveOutBookData = [];         //Data или список в котором будут храниться книги, отсутствующие "взятые из библиотеки"
         this.newBooksUrl = 'https://www.dbooks.org/api/recent';       //Url для получения трендовых книг/новинок
         this.searchUrl = 'https://www.dbooks.org/api/search/'         //Url для поиска
         this.trendyBooksShelf = null;      //Див/Полка с трендовыми книгами
         this.searchResult = null;          //Див/Полка с результатлм поиска
         this.giveOutBooksShelf = null;     //Див/Полка для недоступных книг
         this.reader = null;                //Пользователь на момент использования
+        this.pageReaderResult = null;
     }
 
     // main(){
@@ -22,18 +24,23 @@ class Library {
 
     //Метод для добавления нового читателя библиотеки;
     //Надо будет подключить к кнопке Регистрация
-    newReader(){
+    newReader(data, divForReaderResult){
+        //Получаю див где отображается учетка
+        this.pageReaderResult = divForReaderResult;
         //Создается юзер
-        let user = new Reader(data);
+        let user = new Reader(data, this);
         //После регистрации читатель автоматически входит в библиотеку, становится current читателем
         this.reader = user;
-        //Пушится в дату со всеми читателями this.#userData
-        this.#userData.push(user);
+        //Пушится в дату со всеми читателями this.userData
+        this.userData.push(user);
+        log(this.userData);
+        //Автоматически войти в учетку
+        this.pageReaderResult.append(this.reader.view);
     }
 
     //Метод, для получения/чтения книги
     readBook(book){
-        this.#giveOutBookData.push(book);
+        this.giveOutBookData.push(book);
         this.reader.addBook(book);
     }
 
@@ -41,15 +48,15 @@ class Library {
     return(title, authors){
         //У нас есть data с книгами которые недоступны/используются читателями.
         //Делаем перебор ДАТЫ чтобы просмотреть каждую книгу и сравнить с введенным названием и авторами
-        for(let book of this.#giveOutBookData){
+        for(let book of this.giveOutBookData){
             //Когда находим совпадение
             if(book.title === title && book.authors === authors){
                 //У нашего пользователя также обнуляем свойства? Пока не знаю какие именно
                 //Одним словом Пользователь тоже вернул книгу
                 this.reader.removeBook(book);
                 //И удаляем книгу из нашей ДАТЫ, где хранится список недоступных книг
-                let index = this.#giveOutBookData.indexOf(book);
-                this.#giveOutBookData.slice(index, 1);
+                let index = this.giveOutBookData.indexOf(book);
+                this.giveOutBookData.slice(index, 1);
             }
         }
     }
@@ -67,14 +74,14 @@ class Library {
                             //отображаю 10 новинок!
                             // Никита, если нужно поменять колличесто, меняй
                             for(let i = 0; i < 10; i++){
-                                if(this.#giveOutBookData.length == 0){
+                                if(this.giveOutBookData.length == 0){
                                     //Каждую книгу создаю при помощи класса Book внося в него его дату
                                     let book = new Book(response.books[i], this);
                                     //свойство book.view хранит див с полным отображением книги, вставляю книгу в див резудьтата поиска
                                     this.trendyBooksShelf.append(book.view);
                                 }else {
                                     //Проверяю есть ли книга у меня в списке выданных
-                                    for(let givenBook of this.#giveOutBookData){
+                                    for(let givenBook of this.giveOutBookData){
                                         if(response.books[i].id === givenBook.id){
                                             this.trendyBooksShelf.append(givenBook.view);
                                         }else {
@@ -104,14 +111,14 @@ class Library {
                             //Ответ на запрос Python выходит в виде 98 книг, поэтому отображаю пока только 10
                             //Никита, если нужно поменять колличество, СМЕЛО...
                             for(let i = 0; i < 10; i++){
-                                if(this.#giveOutBookData.length === 0){
+                                if(this.giveOutBookData.length === 0){
                                     //Каждую книгу создаю при помощи класса Book внося в него его дату
                                     let book = new Book(response.books[i], this);
                                     //свойство book.view хранит див с полным отображением книги, вставляю книгу в див резудьтата поиска
                                     this.searchResult.append(book.view);
                                 }else {
                                     //Проверяю есть ли книга у меня в списке выданных
-                                    for(let givenBook of this.#giveOutBookData){
+                                    for(let givenBook of this.giveOutBookData){
                                         if(response.books[i].id == givenBook.id){
                                             this.searchResult.append(givenBook.view);
                                         }else {
@@ -128,7 +135,7 @@ class Library {
 
     showGiveOutBooks(divResult){
         this.giveOutBooksShelf = divResult;
-        for(let givenBook of this.#giveOutBookData){
+        for(let givenBook of this.giveOutBookData){
                 //отображаем книги в дате/списке выданных
                 this.giveOutBooksShelf.append(givenBook.view);
         }
@@ -171,9 +178,30 @@ let searchButton = document.querySelector('#search');
 let divResult = document.querySelector('.search-result');
 searchButton.addEventListener('click', () => {
     let text = inputSearch.value;
-    library.search(text, divResult);
+    if(text === '') divResult.innerHTML = '';
+    else library.search(text, divResult);
 });
 //Получаю див куда будут заноситься книги выданные читателям
 let divGiveOutShelf = document.querySelector('.trend-books');
 library.showGiveOutBooks(divGiveOutShelf);
 
+//Переход в окно регистрации
+let registShowButton = document.querySelector('#enter');
+let registrDiv = document.querySelector('.registr');
+registShowButton.addEventListener('click', () => {
+    if(library.reader === null) registrDiv.style.display = 'block';
+});
+//Регистрация
+let registrBtn = document.querySelector('#registration');
+let regInputs = document.querySelectorAll('.sign-up-input');
+let divForReaderResult = document.querySelector('.read-result');
+registrBtn.addEventListener('click', () => {
+    let data = {};
+    regInputs.forEach(input => {
+        data[input.name] = input.value;
+    });
+    log(data);
+    //Переношу полученную дату и регистрирую нового читателя в библиотеке
+    library.newReader(data, divForReaderResult);
+    registrDiv.style.display = 'none';
+});

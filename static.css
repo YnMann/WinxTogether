@@ -146,12 +146,11 @@ td {
 .btn {
     border:none;
     margin: 20px 30px;
-    text-transform:uppercase;
     font-weight:600;
     color:#fff;
     font-size: 17px;
     padding: 10px;
-    background-color: #c69c72;
+    background-color: #DAA06D;
 }
 
 .for-buttons {
@@ -159,6 +158,67 @@ td {
     justify-content: space-evenly;
 }
 
-.for-buttons button{
-    padding: 10px 100px;
+.for-buttons button, #registration{
+    padding: 10px 140px;
+}
+
+.registr {
+    display: none;
+    text-align: center;
+    font-size: 18px;
+    border: 2px solid #DAA06D;
+    border-radius:10px;
+}
+
+form {
+    width: 900px;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+label {
+    width: 100%;
+}
+
+.registr input {
+    width: 140px;
+    padding: 10px 140px;
+    border-radius: 10px;
+    margin: 10px 40px;
+}
+
+.reader{
+    display: flex;
+    flex-wrap: wrap;
+    font-weight: 600;
+}
+
+.reader img {
+    width: 200px;
+}
+
+.avatar {
+    width: 250px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.reader button {
+    padding: 5px 20px;
+}
+
+.basicInfo {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    margin: 10px 0;
+}
+
+.reader table {
+    width: 700px;
+    text-align: center;
 }

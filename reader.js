@@ -1,111 +1,144 @@
 const log = console.log;
 
 export class Reader {
-    // Данные по умолчанию
-    fullName = '';
-    address = '';
-    listOfBooks = '';
-    image = '';
-    phoneNum = undefined;
-    dateRegist = undefined;
 
-    constructor (data) {
-        this.data = data;
-        // Проверка на заполняемость
-        let check = false;
-        for (let i in this.data)
-            if (this.data[i] !== '') check = true;
-
-        if (check === false) this.view(false);
-        else this.view(true); 
-
-        this.fullName = data.fullName;
-        this.address = data.address;    
+    constructor (data, library) {
+        this.library = library;                            //нужна для соединения данных библиотеки и читателя
+        this.id = library.userData.length;                           //Будет заполнятся в зависимости от базы библиотеки
+        this.fullName = data.fullName;     //
+        this.addres = data.addres;    
         this.phoneNum = data.phoneNum;
-        this.image = data.image;
-        // Создание уникальных id
-        this.id = () => {
-            let res = '';
-            for (let i = 0; i <= 10; i++) 
-                res += Math.trunc(Math.random () * (9 - 0)) + 0;
+        this.avatarUrl = data.image;
+        this.dateRegist = new Date();                  //дата регистрации
+        this.listOfBooks = [];
 
-            return res;
-        };
+        this.readerDetailedInformation();
     }
 
-    view (flag) {
-        // Создаем список данных
-        const ulList = document.createElement('ul');
-
-        const dataField = {
-            fullname: document.createElement('li') 
-            , image: document.createElement('li') 
-            , address: document.createElement('li') 
-            , phone: document.createElement('li')
-            , listOfBooks: document.createElement('li')
-            , dataRegist: document.createElement('li')
-        };
-
-        for (let i in dataField) 
-            ulList.appendChild(dataField[i])
+    readerDetailedInformation() {
+        //Элемент, представляющий читателя в DOM
+        this.view = document.createElement('div');
+        this.view.id = this.id;
+        this.view.className = 'reader';
+        //фото
+        let avatarDiv = document.createElement('div');
+        avatarDiv.className = 'avatar';
+        let avatar = document.createElement('img');
+        avatar.src = this.avatarUrl;
+        let newAvatarBtn = document.createElement('button');
+        newAvatarBtn.id = 'new_photo';
+        newAvatarBtn.className = 'btn';
+        newAvatarBtn.textContent = 'New Photo';
+        avatarDiv.append(avatar);
+        avatarDiv.append(newAvatarBtn);
+        // Name & id
+        let header = document.createElement('div');
+        header.className = 'basicInfo'
+        let fullName = document.createElement('h2');
+        fullName.textContent = 'Hello ' + this.fullName;
+        let id = document.createElement('p');
+        id.textContent = 'Your ID #' + this.id;
+        header.append(fullName);
+        header.append(id);
         
-        // Проверка на заполнение данных
-        const date = new Date();
-        const day = date.getDay();
-        const month = date.getMonth();
-        const year = date.getFullYear();
-        const dateRes = `${day} ${month} ${year} year`;
+        //таблица с подробностями
+        let table = document.createElement('table');
+        //строка даты регистрации
+        let trDateRegist = document.createElement('tr');
+        let tdDateRegistName = document.createElement('td');
+        tdDateRegistName.textContent = 'Incorporation date';
+        let tdDateRegist = document.createElement('td');
+        tdDateRegist.colSpan = '2';
+        tdDateRegist.textContent = this.dateRegist;
 
-        if (flag === false) {
-            const namesRow = [
-                'fullname: '
-                , ''
-                , 'address: '
-                , 'phone: '
-                , 'listOfBooks: '
-                , 'dataRegist: '
-            ];
+        trDateRegist.append(tdDateRegistName);
+        trDateRegist.append(tdDateRegist);
+        table.append(trDateRegist);
+        //строка в таблице с номером
+        let trPhoneNum = document.createElement('tr');
+        let tdPhoneName = document.createElement('td');
+        tdPhoneName.textContent = 'Phone number';
+        let tdPhone = document.createElement('td');
+        tdPhone.textContent = this.phoneNum;
+        let tdNewPhone = document.createElement('td');
+        let newPhoneBtn = document.createElement('button');
+        newPhoneBtn.id = 'new_phone';
+        newPhoneBtn.className = 'btn';
+        newPhoneBtn.textContent = 'New phone number';
+        tdNewPhone.append(newPhoneBtn);
 
-            for (let i = 0; i <= dataField; i++)  
-                dataField[i].append(namesRow);
+        trPhoneNum.append(tdPhoneName);        
+        trPhoneNum.append(tdPhone);        
+        trPhoneNum.append(tdNewPhone);        
+        table.append(trPhoneNum);
+        //cтрока в таблице с адрессом(название, значение, кнопка для нового)
+        let trAddres = document.createElement('tr');
+        let tdAddresName = document.createElement('td');
+        tdAddresName.textContent = 'Addres';
+        let tdAddres = document.createElement('td');
+        tdAddres.textContent = this.addres;
+        let tdNewAddres = document.createElement('td');
+        let newAddresBtn = document.createElement('button');
+        newAddresBtn.id = 'new_addres';
+        newAddresBtn.className = 'btn';
+        newAddresBtn.textContent = 'New Addres';
+        tdNewAddres.append(newAddresBtn);
+
+        trAddres.append(tdAddresName);        
+        trAddres.append(tdAddres);        
+        trAddres.append(tdNewAddres);        
+        table.append(trAddres);
+        //строка для книг в списке прочитанных
+        let trListOfReaderBooks = document.createElement('tr');
+        let tdListOfBooks = document.createElement('td');
+        tdListOfBooks.colSpan = '3';
+        if(this.listOfBooks.length === 0){
+            let hTwo = document.createElement('h2');
+            hTwo.textContent = 'There are no books in the list';
+            tdListOfBooks.append(hTwo);
+        } else {
+            for(let book of this.listOfBooks){
+                tdListOfBooks.append(book.view);
+            }
         }
-        else {
-            const currData = {
-                fullname: ''
-                , image: ''
-                , address: '' 
-                , phone: ''
-                , listOfBooks: ''
-                , dataRegist: ''
-            };
+        trListOfReaderBooks.append(tdListOfBooks);
+        table.append(trListOfReaderBooks);
 
-            let preOut = [];
-            for (let i in namesRow) 
-                preOut.push(namesRow[i]);
-        }   
+        this.view.append(header);
+        this.view.append(avatarDiv);
+        this.view.append(table);
 
-        let out = document.querySelector('.vivod');
-        out.append(ulList);
+        return this.view;
     };
 
-    changePhoto () {
-
+    //Меняю фото url
+    changePhoto (url) {
+        this.avatarUrl = url;
     };
 
-    changeAddress () {
-
+    //Меняю адресс
+    changeAddress (address) {
+        this.address = address;
     };
 
-    changePhoneNum () {
-        
+    //Меняю номер телефона
+    changePhoneNum (phoneNumber) {
+        this.phoneNum = phoneNumber;
     };
 
-    removeBook () {
-
+    //Удаляю книгу из списка
+    removeBook (book) {
+        for(let readerBook of this.listOfBooks){
+            if(readerBook == book){
+                let index = this.listOfBooks.indexOf(book);
+                this.listOfBooks.slice(index, 1);
+            }
+        }
     };
 
-    addBook () {
-
+    //Добавляю книгу в свой список
+    addBook(book) {
+        this.listOfBooks.push(book);
     };
 
     sync () {
