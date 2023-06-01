@@ -19,22 +19,22 @@ export class Book {
         this.imgElement = document.createElement('img');
         this.imgElement.src = this.imageSrc;
         //Вставляю название и описание
-        this.titleElement = document.createElement('p');
-        this.titleElement.textContent = this.title;
+        let title = document.createElement('p');
+        title.textContent = this.title;
         if(this.readerId === ''){
             this.view.style.border = '2px solid green';    //зеленая рамка- книга доступна
         } else this.view.style.border = '2px solid red';   //красная рамка- недоступна
         //Все вставляю
         this.view.append(this.imgElement);
-        this.view.append(this.titleElement );
+        this.view.append(title);
 
         this.view.addEventListener('click', () => this.bookDetails());
     }
 
     //Выдать книгу указанному Читателю через Id 
-    giveOutBook(readerId) {
+    giveOutBook(reader) {
         //Принимаю в метод readerId айди читателя и  устанавливаю его в свойство в книге
-        this.readerId = readerId;
+        this.readerId = reader.id;
         //Книга выдается на семь дней от дня когда ее взяли
         let today = new Date(); // + 7 дней
         this.returnDate.setDate(today.getDate() + 7);
@@ -81,25 +81,53 @@ export class Book {
         baseDiv.className = 'osnova';
         let alert = document.createElement('div');
         alert.className = 'alert';
+        let title = document.createElement('h2');
+        title.textContent = this.title;
         //ввожу детальзированную дату в список
         let descriptionList = document.createElement('table');
         for(let i in data){
-            if(data[i] === this.title || data[i]  === this.id || data[i]  === this.url) continue;
+            let tr = document.createElement('tr')
+            if(data[i] === this.title || data[i]  === this.id 
+                || data[i]  === this.url || i === 'status'
+                || i === 'subtitle') continue;
             else {
-                let li = document.createElement('li');
-                li.textContent = data[i] ;
-                descriptionList.append(li);
+                let titleTd = document.createElement('td');
+                titleTd.textContent = i;
+                let propertyTd = document.createElement('td');
+                propertyTd.textContent = data[i];
+                tr.append(titleTd);
+                tr.append(propertyTd);
+                descriptionList.append(tr);
             }
         }
-        //Создаю кнопку для читения
+        //Создаю кнопку для чтения
         let buttonRead = document.createElement('button');
         buttonRead.id = 'read_book';
+        buttonRead.className= 'btn';
         buttonRead.textContent = 'Читать';
+        //Событие на кнопку ЧИТАТЬ книгу
+        buttonRead.addEventListener('click', (ev) => {
+            //Чтобы не удалялся див
+            ev.stopPropagation();
+            //Вобозначаю эту книгу выданной
+            this.giveOutBook(this.library.reader);
+            //И ввожу в библиотеке ее в список выданных
+            this.library.readBook(this);
+        })
         //Создаю кнопку для возврата
         let buttonReturn = document.createElement('button');
         buttonReturn.id = 'return_book';
+        buttonReturn.className= 'btn';
         buttonReturn.textContent = 'Вернуть';
+        //Событие на кнопку ВЕРНУТЬ книгу
+        buttonReturn.addEventListener('click', (ev) => {
+            ev.stopPropagation();
 
+            this.returnBook();
+            this.library.return(this.title, this.authors);
+        })
+
+        alert.append(title);
         alert.append(this.imgElement);
         alert.append(descriptionList);
         alert.append(buttonRead);
@@ -107,6 +135,10 @@ export class Book {
 
         baseDiv.append(alert);
         document.body.append(baseDiv);
+
+        baseDiv.addEventListener('click', () => {
+            baseDiv.remove();
+        })
     }
 
 
