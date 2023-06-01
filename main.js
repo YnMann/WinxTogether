@@ -11,6 +11,7 @@ class Library {
         this.searchUrl = 'https://www.dbooks.org/api/search/'         //Url для поиска
         this.trendyBooksShelf = null;      //Див/Полка с трендовыми книгами
         this.searchResult = null;          //Див/Полка с результатлм поиска
+        this.giveOutBooksShelf = null;     //Див/Полка для недоступных книг
         this.reader = null;                //Пользователь на момент использования
     }
 
@@ -36,7 +37,6 @@ class Library {
     }
 
     //Метод для возврата книги
-    //надо подключить на кнопку Сдать
     return(title, authors){
         //У нас есть data с книгами которые недоступны/используются читателями.
         //Делаем перебор ДАТЫ чтобы просмотреть каждую книгу и сравнить с введенным названием и авторами
@@ -128,6 +128,13 @@ class Library {
                         });
     }
 
+    showGiveOutBooks(divResult){
+        this.giveOutBooksShelf = divResult;
+        for(let givenBook of this.#giveOutBookData){
+                //отображаем книги в дате/списке выданных
+                this.giveOutBooksShelf.append(givenBook.view);
+        }
+    }
 }
 
 let data = {
@@ -140,8 +147,8 @@ let data = {
 //Создаю библиотеку по классу Library
 const library = new Library();
 //Получаю див куда будут заноситься новинки книг через метод library.newBooks(divShelf);
-let divShelf = document.querySelector('.trend-books');
-library.newBooks(divShelf);
+let divtrendyShelf = document.querySelector('.trend-books');
+library.newBooks(divtrendyShelf);
 //Подключаю поиск на кнопку searchButton через метод из библиотеки library.search(text, divResult)
 // И ввожу в этот метод поиска текст из инпута
 let inputSearch = document.querySelector('#search-book');
@@ -151,3 +158,7 @@ searchButton.addEventListener('click', () => {
     let text = inputSearch.value;
     library.search(text, divResult);
 });
+//Получаю див куда будут заноситься книги выданные читателям
+let divGiveOutShelf = document.querySelector('.trend-books');
+library.showGiveOutBooks(divGiveOutShelf);
+
