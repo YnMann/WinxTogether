@@ -16,8 +16,8 @@ export class Book {
         this.view.id = this.id;
         this.view.className = "trend-book";
         //вставляю картинку
-        this.imgElement = document.createElement('img');
-        this.imgElement.src = this.imageSrc;
+        let img = document.createElement('img');
+        img.src = this.imageSrc;
         //Вставляю название и описание
         let title = document.createElement('p');
         title.textContent = this.title;
@@ -25,7 +25,7 @@ export class Book {
             this.view.style.border = '3px solid green';    //зеленая рамка- книга доступна
         } else this.view.style.border = '3px solid red';   //красная рамка- недоступна
         //Все вставляю
-        this.view.append(this.imgElement);
+        this.view.append(img);
         this.view.append(title);
 
         this.view.addEventListener('click', () => this.bookDetails());
@@ -82,16 +82,17 @@ export class Book {
         baseDiv.className = 'osnova';
         let alert = document.createElement('div');
         alert.className = 'alert';
+        let img = document.createElement('img');
+        img.src = this.imageSrc;
         let title = document.createElement('h2');
         title.textContent = this.title;
         //ввожу детальзированную дату в список
         let descriptionList = document.createElement('table');
         for(let i in data){
             let tr = document.createElement('tr')
-            if(data[i] === this.title || data[i]  === this.id 
-                || data[i]  === this.url || i === 'status'
-                || i === 'subtitle' || i === 'image') continue;
-            else {
+            if(i === 'description' || i  === 'authors' 
+                || i  === 'publisher' || i === 'years'
+                || i === 'pages') {
                 let titleTd = document.createElement('td');
                 titleTd.textContent = i.slice(0,1).toUpperCase() + i.slice(1);
                 let propertyTd = document.createElement('td');
@@ -129,7 +130,7 @@ export class Book {
         })
 
         alert.append(title);
-        alert.append(this.imgElement);
+        alert.append(img);
         alert.append(descriptionList);
         alert.append(buttonRead);
         alert.append(buttonReturn);
