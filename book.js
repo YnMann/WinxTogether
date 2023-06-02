@@ -155,7 +155,4 @@ export class Book {
             baseDiv.remove();
         });
     }
-
-
 }
-

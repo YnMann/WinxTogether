@@ -33,13 +33,26 @@ class Library {
         let user = new Reader(data, this);
         //После регистрации читатель автоматически входит в библиотеку, становится current читателем
         this.reader = user;
+        let readerWithoutLib = {};
+        for (let i in this.reader) {
+            if (i === 'library') continue;
+            else readerWithoutLib[i] = this.reader[i];
+        }
+
+        this.localStorage(readerWithoutLib);
         //Пушится в дату со всеми читателями this.userData
-        this.userData.push(user);
-        log(this.userData);
+        this.userData.push(this.userLocalStorage);
         //Автоматически войти в учетку
         this.divReader = this.reader.view;
         this.pageReaderResult.append(this.divReader);
     }
+
+    localStorage (obj) {
+        let serial = JSON.stringify(obj);
+        localStorage.setItem(obj.id, serial);
+        this.userLocalStorage = JSON.parse(localStorage.getItem(obj.id));
+        // log('UserLocla', this.userLocalStorage)
+    };
 
     //Метод для входа существующего юзера
     logIn(id){
@@ -47,7 +60,7 @@ class Library {
         this.closeExistingList();
         //Нахожу пользователя по айди в дате и вставляю его в див
         this.reader = this.userData[id];
-        log(this.reader.view);
+        // log(this.reader.view);
         this.divReader = this.reader.view;
         this.pageReaderResult.append(this.divReader);
     }
