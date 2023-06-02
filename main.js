@@ -43,7 +43,9 @@ class Library {
     //Метод для входа существующего юзера
     logIn(id){
         //Нахожу пользователя по айди в дате и вставляю его в див
-        this.divReader = this.userData[id].view;
+        this.reader = this.userData[id];
+        log(this.reader.view);
+        this.divReader = this.reader.view;
         this.pageReaderResult.append(this.divReader);
     }
 
@@ -52,7 +54,7 @@ class Library {
         //обнуляю current читателя
         this.reader = null;
         //Очищаю див от учетки
-        this.divReader.innerHTML = '';
+        this.divReader.remove();
     }
 
     //Метод, для получения/чтения книги
