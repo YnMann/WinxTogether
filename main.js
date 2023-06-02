@@ -78,7 +78,7 @@ class Library {
             if(this.giveOutBookData[i].title === title && this.giveOutBookData[i].authors === authors){
                 //У нашего пользователя также обнуляем свойства? Пока не знаю какие именно
                 //Одним словом Пользователь тоже вернул книгу
-                this.reader.removeBook(book.title, book.authors);
+                this.reader.removeBook(title, authors);
                 //И удаляем книгу из нашей ДАТЫ, где хранится список недоступных книг
                 this.giveOutBookData.splice(i, 1);
                 log(this.giveOutBookData);
