@@ -186,10 +186,10 @@ export class Reader {
     }
 
     //Удаляю книгу из списка
-    removeBook (book) {
+    removeBook (title, authors) {
         for(let i in this.listOfBooks){
-            if(this.listOfBooks[i].title === book.title && this.listOfBooks[i].authors === book.authors){
-                this.listOfBooks.slice(i, 1);
+            if(this.listOfBooks[i].title === title && this.listOfBooks[i].authors === authors){
+                this.listOfBooks.splice(i, 1);
                 this.sync();
             }
         }

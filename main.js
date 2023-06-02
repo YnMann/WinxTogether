@@ -6,17 +6,20 @@ const log = console.log;
 class Library {
 
     constructor(){
-        this.userData = [];                //Data Где будут храниться новые юзеры;
-        this.giveOutBookData = [];         //Data или список в котором будут храниться книги, отсутствующие "взятые из библиотеки"
+        this.userData = [];                      //Data Где будут храниться новые юзеры;
+        this.giveOutBookData = [];               //Data или список в котором будут храниться книги, отсутствующие "взятые из библиотеки"
         this.newBooksUrl = 'https://www.dbooks.org/api/recent';       //Url для получения трендовых книг/новинок
         this.searchUrl = 'https://www.dbooks.org/api/search/'         //Url для поиска
-        this.trendyBooksShelf = null;      //Див/Полка с трендовыми книгами
-        this.searchResult = null;          //Див/Полка с результатлм поиска
-        this.giveOutBooksShelf = null;     //Див/Полка для недоступных книг
-        this.reader = null;                //Пользователь на момент использования
+        this.trendyBooksShelf = null;            //Див/Полка с трендовыми книгами
+        this.searchResult = null;                //Див/Полка с результатлм поиска
+        this.divGiveOutBooks = null;
+        this.giveOutBooksShelf = document.createElement('div');;     //Див/Полка для недоступных книг
+        this.giveOutBooksShelf.className = 'give-out-books';
+        this.reader = null;                        //Пользователь на момент использования
         this.pageReaderResult = null;
-        this.divReader = null;              //div в котором хранится читатель. Нужен для Лог Аута
+        this.divReader = null;                      //div в котором хранится читатель. Нужен для Лог Аута
         this.listOfGiveOutBooks = null;
+   
     }
 
     //Метод для добавления нового читателя библиотеки;
@@ -63,24 +66,26 @@ class Library {
         this.giveOutBookData.push(book);
         log(this.giveOutBookData);
         this.reader.addBook(book);
-        this.showGiveOutBooks(this.giveOutBooksShelf);
+        this.showGiveOutBooks(this.divGiveOutBooks);
     }
 
     //Метод для возврата книги
-    return(book){
+    return(title, authors){
         //У нас есть data с книгами которые недоступны/используются читателями.
         //Делаем перебор ДАТЫ чтобы просмотреть каждую книгу и сравнить с введенным названием и авторами
         for(let i in this.giveOutBookData){
             //Когда находим совпадение
-            if(this.giveOutBookData[i].title === book.title && this.giveOutBookData[i].authors === book.authors){
+            if(this.giveOutBookData[i].title === title && this.giveOutBookData[i].authors === authors){
                 //У нашего пользователя также обнуляем свойства? Пока не знаю какие именно
                 //Одним словом Пользователь тоже вернул книгу
-                this.reader.removeBook(this.giveOutBookData[i]);
+                this.reader.removeBook(book.title, book.authors);
                 //И удаляем книгу из нашей ДАТЫ, где хранится список недоступных книг
-                this.giveOutBookData.slice(i, 1);
+                this.giveOutBookData.splice(i, 1);
+                log(this.giveOutBookData);
             }
         }
-        this.showGiveOutBooks(this.giveOutBooksShelf);
+        this.showGiveOutBooks(this.divGiveOutBooks);
+        log(this.reader.listOfBooks);
     }
 
     //метод для получения и отображения новинок, получает в себя див куда будут вноситься полученные книги
@@ -156,13 +161,18 @@ class Library {
     }
 
     showGiveOutBooks(divResult){
-        this.giveOutBooksShelf = divResult;
+        this.divGiveOutBooks = divResult;
         for(let givenBook of this.giveOutBookData){
                 let cloneBook = Object.assign({}, givenBook);;
                 log(cloneBook);
                 //отображаем книги в дате/списке выданных
                 this.giveOutBooksShelf.append(cloneBook.view);
         }
+        this.divGiveOutBooks.append(this.giveOutBooksShelf);
+    }
+
+    deleteGiveOutBooks(book){
+
     }
 
     openExistingList() {
@@ -261,3 +271,4 @@ logInBtn.addEventListener('click', () => {
 //Показываю книги в списки забранных
 let divGiveOutBooks = document.querySelector('#give_out');
 library.showGiveOutBooks(divGiveOutBooks);
+

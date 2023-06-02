@@ -58,7 +58,7 @@ export class Book {
         this.readerUrl = '';
         this.returnDate = null;
         //И ввожу в библиотеке ее в список выданных
-        this.library.return(this);
+        this.library.return(this.title, this.authors);
         this.sync();
     }
 
