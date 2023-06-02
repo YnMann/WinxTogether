@@ -23,13 +23,17 @@ export class Reader {
         //фото
         let avatarDiv = document.createElement('div');
         avatarDiv.className = 'avatar';
-        let avatar = document.createElement('img');
-        avatar.src = this.avatarUrl;
+        this.tdAvatar = document.createElement('img');
+        this.tdAvatar.src = this.avatarUrl;
         let newAvatarBtn = document.createElement('button');
         newAvatarBtn.id = 'new_photo';
         newAvatarBtn.className = 'btn';
         newAvatarBtn.textContent = 'New Photo';
-        avatarDiv.append(avatar);
+        //Навешиваю установку нового фото на кнопку
+        newAvatarBtn.addEventListener('click', () => {
+            this.changePhoto();
+        })
+        avatarDiv.append(this.tdAvatar);
         avatarDiv.append(newAvatarBtn);
         // Name & id
         let header = document.createElement('div');
@@ -38,8 +42,17 @@ export class Reader {
         fullName.textContent = 'Hello ' + this.fullName;
         let id = document.createElement('p');
         id.textContent = 'Your ID #' + this.id;
+        let logOutBtn = document.createElement('button');
+        logOutBtn.id = 'log_out';
+        logOutBtn.className = 'btn';
+        logOutBtn.textContent = 'Log Out';
+        //Навешиваю выход из учетки на кнопку
+        logOutBtn.addEventListener('click', () => {
+            this.library.logOut();
+        })
         header.append(fullName);
         header.append(id);
+        header.append(logOutBtn);
         
         //таблица с подробностями
         let table = document.createElement('table');
@@ -58,50 +71,58 @@ export class Reader {
         let trPhoneNum = document.createElement('tr');
         let tdPhoneName = document.createElement('td');
         tdPhoneName.textContent = 'Phone number';
-        let tdPhone = document.createElement('td');
-        tdPhone.textContent = this.phoneNum;
+        this.tdPhone = document.createElement('td');
+        this.tdPhone.textContent = this.phoneNum;
         let tdNewPhone = document.createElement('td');
         let newPhoneBtn = document.createElement('button');
         newPhoneBtn.id = 'new_phone';
         newPhoneBtn.className = 'btn';
         newPhoneBtn.textContent = 'New phone number';
+        //Навешиваю установку нового номера телефона на кнопку
+        newPhoneBtn.addEventListener('click', () => {
+            this.changePhoneNum();
+        })
         tdNewPhone.append(newPhoneBtn);
 
         trPhoneNum.append(tdPhoneName);        
-        trPhoneNum.append(tdPhone);        
+        trPhoneNum.append(this.tdPhone);        
         trPhoneNum.append(tdNewPhone);        
         table.append(trPhoneNum);
         //cтрока в таблице с адрессом(название, значение, кнопка для нового)
         let trAddres = document.createElement('tr');
         let tdAddresName = document.createElement('td');
         tdAddresName.textContent = 'Addres';
-        let tdAddres = document.createElement('td');
-        tdAddres.textContent = this.addres;
+        this.tdAddres = document.createElement('td');
+        this.tdAddres.textContent = this.addres;
         let tdNewAddres = document.createElement('td');
         let newAddresBtn = document.createElement('button');
         newAddresBtn.id = 'new_addres';
         newAddresBtn.className = 'btn';
         newAddresBtn.textContent = 'New Addres';
+        //Навешиваю установку адреса на кнопку
+        newAddresBtn.addEventListener('click', () => {
+            this.changeAddress();
+        })
         tdNewAddres.append(newAddresBtn);
 
         trAddres.append(tdAddresName);        
-        trAddres.append(tdAddres);        
+        trAddres.append(this.tdAddres);        
         trAddres.append(tdNewAddres);        
         table.append(trAddres);
         //строка для книг в списке прочитанных
         let trListOfReaderBooks = document.createElement('tr');
-        let tdListOfBooks = document.createElement('td');
-        tdListOfBooks.colSpan = '3';
+        this.tdListOfBooks = document.createElement('td');
+        this.tdListOfBooks.colSpan = '3';
         if(this.listOfBooks.length === 0){
             let hTwo = document.createElement('h2');
             hTwo.textContent = 'There are no books in the list';
-            tdListOfBooks.append(hTwo);
+            this.tdListOfBooks.append(hTwo);
         } else {
             for(let book of this.listOfBooks){
-                tdListOfBooks.append(book.view);
+                this.tdListOfBooks.append(book.view);
             }
         }
-        trListOfReaderBooks.append(tdListOfBooks);
+        trListOfReaderBooks.append(this.tdListOfBooks);
         table.append(trListOfReaderBooks);
 
         this.view.append(header);
@@ -112,19 +133,44 @@ export class Reader {
     };
 
     //Меняю фото url
-    changePhoto (url) {
-        this.avatarUrl = url;
+    changePhoto() {
+        let url = prompt('Enter the address of the photo: ');
+        if(url !== ''){
+            this.avatarUrl = url;
+            this.sync();
+        }
     };
 
     //Меняю адресс
-    changeAddress (address) {
-        this.address = address;
+    changeAddress() {
+        let addres = prompt('Enter your address: ');
+        if(addres !== ''){
+            this.address = addres;
+            this.sync();
+        }
     };
 
     //Меняю номер телефона
-    changePhoneNum (phoneNumber) {
-        this.phoneNum = phoneNumber;
+    changePhoneNum() {
+        let phoneNumber = prompt('Enter your Phone number: ');
+        if(phoneNumber !== ''){
+            this.phoneNum = phoneNumber;
+            this.sync();
+        }
     };
+
+    //Метод для добавления книг в список
+    showReaderBooks(){
+        if(this.listOfBooks.length === 0){
+            let hTwo = document.createElement('h2');
+            hTwo.textContent = 'There are no books in the list';
+            this.tdListOfBooks.append(hTwo);
+        } else {
+            for(let book of this.listOfBooks){
+                this.tdListOfBooks.append(book.view);
+            }
+        }
+    }
 
     //Удаляю книгу из списка
     removeBook (book) {
@@ -141,7 +187,12 @@ export class Reader {
         this.listOfBooks.push(book);
     };
 
-    sync () {
-
+    sync(){
+        //update this.view elements properties
+        this.tdAvatar.src = this.avatarUrl;
+        this.tdPhone.textContent = this.phoneNum;
+        this.tdAddres.textContent = this.addres;
+        //обновляю данные в дате библиотеки
+        this.library.sync(this);
     };
 }

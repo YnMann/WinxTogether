@@ -54,8 +54,8 @@ export class Book {
     sync() {
         //Если в ридерАйди пусто, книга без читателя и Доступна
         if(this.readerId === ''){
-            inStock.textContent = "Доступна";
-        } else inStock.textContent = "Недоступна"; //Если есть свойство указывающее на читателя, то книга Недоступна
+            this.view.style.border = '3px solid green';    //зеленая рамка- книга доступна
+        } else this.view.style.border = '3px solid red';   //красная рамка- недоступна
     }
 
     bookDetails(){

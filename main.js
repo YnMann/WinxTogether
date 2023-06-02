@@ -16,6 +16,7 @@ class Library {
         this.giveOutBooksShelf = null;     //Див/Полка для недоступных книг
         this.reader = null;                //Пользователь на момент использования
         this.pageReaderResult = null;
+        this.divReader = null;              //div в котором хранится читатель. Нужен для Лог Аута
     }
 
     // main(){
@@ -35,7 +36,21 @@ class Library {
         this.userData.push(user);
         log(this.userData);
         //Автоматически войти в учетку
-        this.pageReaderResult.append(this.reader.view);
+        this.divReader = this.reader.view;
+        this.pageReaderResult.append(this.divReader);
+    }
+
+    //Метод для входа существующего юзера
+    logIn(id){
+
+    }
+
+    //Метод для выхода читателя из учетки
+    logOut() {
+        //обнуляю current читателя
+        this.reader = null;
+        //Очищаю див от учетки
+        this.divReader.innerHTML = '';
     }
 
     //Метод, для получения/чтения книги
@@ -140,14 +155,13 @@ class Library {
                 this.giveOutBooksShelf.append(givenBook.view);
         }
     }
+
+    sync(){
+        //обновляю данные
+        // this.pageReaderResult.append(this.divReader);
+    }
 }
 
-let data = {
-    fullName: ''
-    , address: ''
-    , phoneNum: ''
-    , image: ''
-};
 
 //Работа менюшки
 const divsOnClick = document.querySelectorAll('.left-menu div');
@@ -181,17 +195,16 @@ searchButton.addEventListener('click', () => {
     if(text === '') divResult.innerHTML = '';
     else library.search(text, divResult);
 });
-//Получаю див куда будут заноситься книги выданные читателям
-let divGiveOutShelf = document.querySelector('.trend-books');
-library.showGiveOutBooks(divGiveOutShelf);
-
-//Переход в окно регистрации
+// Переход в окно регистрации
 let registShowButton = document.querySelector('#enter');
 let registrDiv = document.querySelector('.registr');
 registShowButton.addEventListener('click', () => {
-    if(library.reader === null) registrDiv.style.display = 'block';
+    if (library.reader === null) {
+        registrDiv.classList.add('active');
+    }
 });
-//Регистрация
+
+// Регистрация
 let registrBtn = document.querySelector('#registration');
 let regInputs = document.querySelectorAll('.sign-up-input');
 let divForReaderResult = document.querySelector('.read-result');
@@ -199,9 +212,10 @@ registrBtn.addEventListener('click', () => {
     let data = {};
     regInputs.forEach(input => {
         data[input.name] = input.value;
+        input.value = '';
     });
     log(data);
-    //Переношу полученную дату и регистрирую нового читателя в библиотеке
+    // Переношу полученную дату и регистрирую нового читателя в библиотеке
     library.newReader(data, divForReaderResult);
-    registrDiv.style.display = 'none';
+    registrDiv.classList.remove('active');
 });

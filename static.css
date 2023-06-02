@@ -62,10 +62,6 @@
     display: none;
 }
 
-.active {
-    display: block;
-}
-
 #search-book {
     width: 50%;
     margin: 0 auto 10px;
@@ -133,7 +129,7 @@
     width: 100%;
 }
 
-table {
+.alert table {
     width: 800px;
     border-collapse: collapse;
 }
@@ -221,4 +217,8 @@ label {
 .reader table {
     width: 700px;
     text-align: center;
+}
+
+.active {
+    display: block;
 }
