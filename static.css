@@ -217,6 +217,7 @@ label {
 .reader table {
     width: 700px;
     text-align: center;
+    border-collapse: collapse;
 }
 
 .active {

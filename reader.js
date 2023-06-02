@@ -185,6 +185,8 @@ export class Reader {
     //Добавляю книгу в свой список
     addBook(book) {
         this.listOfBooks.push(book);
+        log(this.listOfBooks);
+        log('reader ' + this.listOfBooks);
     };
 
     sync(){

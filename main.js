@@ -60,8 +60,26 @@ class Library {
     //Метод, для получения/чтения книги
     readBook(book){
         this.giveOutBookData.push(book);
+        log(this.giveOutBookData);
         this.reader.addBook(book);
-    }
+        this.showGiveOutBooks(this.giveOutBooksShelf);
+
+    // }else {
+    //     for(let book of libraryBooksData){
+    //         if(book.title === this.title && book.authors === this.authors) continue;
+    //         else {
+    //             this.library.readBook(this);
+    //         }
+
+    //         //Книга выдается на семь дней от дня когда ее взяли
+    //         // let today = new Date(); // + 7 дней
+    //         // this.returnDate.setDate(today.getDate() + 7);
+
+    //         //Синхронизирую, для того чтобы убрать пометку что она Доступна в диве, ведь ее забрали
+    //         this.sync();
+    //     }
+    // }
+        }
 
     //Метод для возврата книги
     return(title, authors){
@@ -78,6 +96,7 @@ class Library {
                 this.giveOutBookData.slice(index, 1);
             }
         }
+        this.showGiveOutBooks(this.giveOutBooksShelf);
     }
 
     //метод для получения и отображения новинок, получает в себя див куда будут вноситься полученные книги
@@ -160,9 +179,10 @@ class Library {
         }
     }
 
-    sync(){
+    sync(reader){
         //обновляю данные
         // this.pageReaderResult.append(this.divReader);
+
     }
 }
 
@@ -229,3 +249,6 @@ logInBtn.addEventListener('click', () => {
     let id = +prompt('Enter Your Id');
     library.logIn(id);
 });
+//Показываю книги в списки забранных
+let divGiveOutBooks = document.querySelector('#give_out');
+library.showGiveOutBooks(divGiveOutBooks);

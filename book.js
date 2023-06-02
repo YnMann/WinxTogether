@@ -32,19 +32,30 @@ export class Book {
     }
 
     //Выдать книгу указанному Читателю через Id 
-    giveOutBook(reader) {
+    giveOutBook() {
+        
         this.library.readBook(this);
         //Принимаю в метод readerId айди читателя и  устанавливаю его в свойство в книге
+        let reader = this.library.reader;
         this.readerId = reader.id;
-        //Книга выдается на семь дней от дня когда ее взяли
-        let today = new Date(); // + 7 дней
-        this.returnDate.setDate(today.getDate() + 7);
-        //Синхронизирую, для того чтобы убрать пометку что она Доступна в диве, ведь ее забрали
-        this.sync();
+                // if(book.title === this.title && book.authors === this.authors) continue;
+                // else {
+                //     this.library.readBook(this);
+                // }
+    
+                //Книга выдается на семь дней от дня когда ее взяли
+                // let today = new Date(); // + 7 дней
+                // this.returnDate.setDate(today.getDate() + 7);
+    
+                //Синхронизирую, для того чтобы убрать пометку что она Доступна в диве, ведь ее забрали
+                this.sync();
+        
     }
 
     //Возвращение книги
     returnBook() {
+        //И ввожу в библиотеке ее в список выданных
+        this.library.return(this.title, this.authors);
         //Обнуляю все данные и через синхронизацию пометку Недоступна меняю на Доступно, т.к. книгу Вернули
         this.readerUrl = '';
         this.returnDate = null;
@@ -54,7 +65,7 @@ export class Book {
     sync() {
         //Если в ридерАйди пусто, книга без читателя и Доступна
         if(this.readerId === ''){
-            this.view.style.border = '3px solid green';    //зеленая рамка- книга доступна
+               this.view.style.border = '3px solid green';    //зеленая рамка- книга доступна
         } else this.view.style.border = '3px solid red';   //красная рамка- недоступна
     }
 
@@ -64,15 +75,6 @@ export class Book {
                         .then(response => {
                             log(response);
                             this.viewDetailedInformation(response);
-
-                            // let givenBook = new Book(response, library);
-                            // //Помечаю книгу как выданную
-                            // givenBook.giveOutBook(this.reader.id);
-                            // //добавляю книгу читателю
-                            // // передаю ее чтобы потом можно было отображать в списке читателя)
-                            // this.reader.addBook(givenBook);
-                            // //Пушу книгу в дату со списком недоступных книг
-                            // this.#giveOutBookData.push(givenBook);
                         });
 
     }
@@ -81,8 +83,8 @@ export class Book {
         //Создаю основу для развернутой информации
         let baseDiv = document.createElement('div');
         baseDiv.className = 'osnova';
-        let alert = document.createElement('div');
-        alert.className = 'alert';
+        let bookDiv = document.createElement('div');
+        bookDiv.className = 'alert';
         let img = document.createElement('img');
         img.src = this.imageSrc;
         let title = document.createElement('h2');
@@ -112,11 +114,16 @@ export class Book {
         buttonRead.addEventListener('click', (ev) => {
             //Чтобы не удалялся див
             ev.stopPropagation();
-            //Вобозначаю эту книгу выданной
-            this.giveOutBook(this.library.reader);
-            //И ввожу в библиотеке ее в список выданных
-            this.library.readBook(this);
-        })
+
+            //обозначаю эту книгу выданной
+            if(this.library.reader !== null){
+                this.giveOutBook(this.library.reader);
+                let successMessage = alert("You've added this book to yourself");
+            } else {
+                let errorMessage = alert('First, LOG IN to your account');
+            }
+            baseDiv.remove();
+        });
         //Создаю кнопку для возврата
         let buttonReturn = document.createElement('button');
         buttonReturn.id = 'return_book';
@@ -126,22 +133,28 @@ export class Book {
         buttonReturn.addEventListener('click', (ev) => {
             ev.stopPropagation();
 
-            this.returnBook();
-            this.library.return(this.title, this.authors);
-        })
+            if(this.library.reader !== null){
+                this.returnBook();
+                this.library.return(this.title, this.authors);
+                let successMessage = alert("You gave this book to the library");
+            } else {
+                let errorMessage = alert('First, LOG IN to your account');
+            }
+            baseDiv.remove();
+        });
 
-        alert.append(title);
-        alert.append(img);
-        alert.append(descriptionList);
-        alert.append(buttonRead);
-        alert.append(buttonReturn);
+        bookDiv.append(title);
+        bookDiv.append(img);
+        bookDiv.append(descriptionList);
+        bookDiv.append(buttonRead);
+        bookDiv.append(buttonReturn);
 
-        baseDiv.append(alert);
+        baseDiv.append(bookDiv);
         document.body.append(baseDiv);
 
         baseDiv.addEventListener('click', () => {
             baseDiv.remove();
-        })
+        });
     }
 
 
