@@ -113,15 +113,7 @@ export class Reader {
         let trListOfReaderBooks = document.createElement('tr');
         this.tdListOfBooks = document.createElement('td');
         this.tdListOfBooks.colSpan = '3';
-        if(this.listOfBooks.length === 0){
-            let hTwo = document.createElement('h2');
-            hTwo.textContent = 'There are no books in the list';
-            this.tdListOfBooks.append(hTwo);
-        } else {
-            for(let book of this.listOfBooks){
-                this.tdListOfBooks.append(book.view);
-            }
-        }
+        this.showReaderBooks();
         trListOfReaderBooks.append(this.tdListOfBooks);
         table.append(trListOfReaderBooks);
 
@@ -177,6 +169,7 @@ export class Reader {
         for(let i in this.listOfBooks){
             if(this.listOfBooks[i].title === book.title && this.listOfBooks[i].authors === book.authors){
                 this.listOfBooks.slice(i, 1);
+                sync();
             }
         }
     };
@@ -184,9 +177,12 @@ export class Reader {
     //Добавляю книгу в свой список
     addBook(book) {
         this.listOfBooks.push(book);
-        log(this.listOfBooks);
-        log('reader ' + this.listOfBooks);
+        sync();
     };
+
+    addToMyList() {
+
+    }
 
     sync(){
         //update this.view elements properties
@@ -195,5 +191,7 @@ export class Reader {
         this.tdAddres.textContent = this.addres;
         //обновляю данные в дате библиотеки
         this.library.sync(this);
+
+        showReaderBooks();
     };
 }
