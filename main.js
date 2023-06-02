@@ -1,6 +1,5 @@
 import { Book } from "./book.js";
 import { Reader } from './reader.js';
-import { Form } from './form.js';
 const log = console.log;
 
 //Класс Библиотека основной, будет отвечать за работу страницы
@@ -17,15 +16,14 @@ class Library {
         this.reader = null;                //Пользователь на момент использования
         this.pageReaderResult = null;
         this.divReader = null;              //div в котором хранится читатель. Нужен для Лог Аута
+        this.listOfGiveOutBooks = null;
     }
-
-    // main(){
-    //     this.newBooks();
-    // }
 
     //Метод для добавления нового читателя библиотеки;
     //Надо будет подключить к кнопке Регистрация
     newReader(data, divForReaderResult){
+        //Если уже отображен список с зарегистрированными пользователями, обнуляю его
+        this.closeExistingList();
         //Получаю див где отображается учетка
         this.pageReaderResult = divForReaderResult;
         //Создается юзер
@@ -42,6 +40,8 @@ class Library {
 
     //Метод для входа существующего юзера
     logIn(id){
+        //Если уже отображен список с зарегистрированными пользователями, обнуляю его
+        this.closeExistingList();
         //Нахожу пользователя по айди в дате и вставляю его в див
         this.reader = this.userData[id];
         log(this.reader.view);
@@ -55,6 +55,7 @@ class Library {
         this.reader = null;
         //Очищаю див от учетки
         this.divReader.remove();
+        this.openExistingList();
     }
 
     //Метод, для получения/чтения книги
@@ -63,23 +64,7 @@ class Library {
         log(this.giveOutBookData);
         this.reader.addBook(book);
         this.showGiveOutBooks(this.giveOutBooksShelf);
-
-    // }else {
-    //     for(let book of libraryBooksData){
-    //         if(book.title === this.title && book.authors === this.authors) continue;
-    //         else {
-    //             this.library.readBook(this);
-    //         }
-
-    //         //Книга выдается на семь дней от дня когда ее взяли
-    //         // let today = new Date(); // + 7 дней
-    //         // this.returnDate.setDate(today.getDate() + 7);
-
-    //         //Синхронизирую, для того чтобы убрать пометку что она Доступна в диве, ведь ее забрали
-    //         this.sync();
-    //     }
-    // }
-        }
+    }
 
     //Метод для возврата книги
     return(book){
@@ -90,7 +75,7 @@ class Library {
             if(this.giveOutBookData[i].title === book.title && this.giveOutBookData[i].authors === book.authors){
                 //У нашего пользователя также обнуляем свойства? Пока не знаю какие именно
                 //Одним словом Пользователь тоже вернул книгу
-                this.reader.removeBook(book);
+                this.reader.removeBook(this.giveOutBookData[i]);
                 //И удаляем книгу из нашей ДАТЫ, где хранится список недоступных книг
                 this.giveOutBookData.slice(i, 1);
             }
@@ -173,9 +158,33 @@ class Library {
     showGiveOutBooks(divResult){
         this.giveOutBooksShelf = divResult;
         for(let givenBook of this.giveOutBookData){
+                let cloneBook = Object.assign({}, givenBook);;
+                log(cloneBook);
                 //отображаем книги в дате/списке выданных
-                this.giveOutBooksShelf.append(givenBook.view);
+                this.giveOutBooksShelf.append(cloneBook.view);
         }
+    }
+
+    openExistingList() {
+        this.listOfGiveOutBooks = document.createElement('div');
+        this.listOfGiveOutBooks.className = 'readers-list';
+      
+        //Я своровала и подставила тупо, сама хз что происходит...
+        const sortedUserData = this.userData.slice().sort((a, b) => {
+          return a.fullName.localeCompare(b.fullName); // Сортировка по алфавиту
+        });
+      
+        for (let reader of sortedUserData) {
+          let readerReviewInfo = reader.review;
+          this.listOfGiveOutBooks.append(readerReviewInfo);
+        }
+        this.pageReaderResult.append(this.listOfGiveOutBooks);
+      }
+      
+
+    closeExistingList(){
+        //Если уже отображен список с зарегистрированными пользователями, обнуляю его
+        if(this.listOfGiveOutBooks) this.listOfGiveOutBooks.remove();
     }
 
     sync(reader){
@@ -224,6 +233,7 @@ let registrDiv = document.querySelector('.registr');
 registShowButton.addEventListener('click', () => {
     if (library.reader === null) {
         registrDiv.classList.add('active');
+        library.closeExistingList();
     }
 });
 

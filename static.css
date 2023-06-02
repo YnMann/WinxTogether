@@ -48,7 +48,7 @@
     margin: 0 auto;
 }
 
-.trend-books, .search-result {
+.trend-books, .search-result, .give-out-books {
     margin: 0 auto;
     display: flex;
     padding-bottom: 40px;
@@ -79,7 +79,7 @@
     transform: translateX(20px);
 }
 
-.trend-book {
+.trend-book{
     width: 164px;
     height: 210px;
     margin: 3px;
@@ -91,7 +91,7 @@
     text-align: center;
 }
 
-.trend-book img {
+.trend-book img, .reader-review img {
     width: 155px;
     height: 160px;
 }
@@ -222,4 +222,26 @@ label {
 
 .active {
     display: block;
+}
+
+.readers-list {
+    margin: 10px auto;
+    display: flex;
+    padding-bottom: 40px;
+    border-bottom: 2px grey dashed;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.reader-review {
+    width: 164px;
+    height: 210px;
+    margin: 3px;
+    font-size: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 10px;
+    text-align: center;
+    border: 3px solid #000;
 }

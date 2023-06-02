@@ -11,10 +11,14 @@ export class Reader {
         this.avatarUrl = data.image;
         this.dateRegist = new Date();                  //дата регистрации
         this.listOfBooks = [];
+        this.view = null;                               //Учетка
+        this.review = null;                               //Краткая информация о юзере
 
         this.readerDetailedInformation();
+        this.shortReview();
     }
 
+    //Полное отображение учетки читателя
     readerDetailedInformation() {
         //Элемент, представляющий читателя в DOM
         this.view = document.createElement('div');
@@ -124,13 +128,29 @@ export class Reader {
         return this.view;
     };
 
+    //Краткая информация для отображения в списке всех пользователей
+    shortReview() {
+        this.review = document.createElement('div');
+        this.review.className = 'reader-review';
+        //photo
+        let avatar = document.createElement('img');
+        avatar.src = this.avatarUrl;
+        // Name & id
+        let fullNameAndId = document.createElement('h3');
+        fullNameAndId.textContent = this.fullName + ' ID#' + this.id;
+        this.review.append(avatar);
+        this.review.append(fullNameAndId);
+
+        return this.review;
+    }
+
     //Меняю фото url
     changePhoto() {
         let url = prompt('Enter the address of the photo: ');
         if(url !== ''){
             this.avatarUrl = url;
             this.sync();
-        }
+        }else return;
     };
 
     //Меняю адресс
@@ -139,7 +159,7 @@ export class Reader {
         if(addres !== ''){
             this.address = addres;
             this.sync();
-        }
+        }else return;
     };
 
     //Меняю номер телефона
@@ -148,7 +168,7 @@ export class Reader {
         if(phoneNumber !== ''){
             this.phoneNum = phoneNumber;
             this.sync();
-        }
+        }else return;
     };
 
     //Метод для добавления книг в список
@@ -182,10 +202,6 @@ export class Reader {
         this.showReaderBooks();
         this.sync();
     };
-
-    addToMyList() {
-
-    }
 
     sync(){
         //update this.view elements properties
