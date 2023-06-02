@@ -1,3 +1,6 @@
+import {modalWin} from './modalWin.js';
+
+
 const log = console.log;
 
 export class Book {
@@ -23,7 +26,9 @@ export class Book {
         title.textContent = this.title;
         if(this.readerId === ''){
             this.view.style.border = '3px solid green';    //зеленая рамка- книга доступна
+            this.view.style.borderRadius = '10px';
         } else this.view.style.border = '3px solid red';   //красная рамка- недоступна
+        this.view.style.borderRadius = '10px';
         //Все вставляю
         this.view.append(img);
         this.view.append(title);
@@ -66,7 +71,9 @@ export class Book {
         //Если в ридерАйди пусто, книга без читателя и Доступна
         if(this.readerId === ''){
                this.view.style.border = '3px solid green';    //зеленая рамка- книга доступна
+               this.view.style.borderRadius = '10px';
         } else this.view.style.border = '3px solid red';   //красная рамка- недоступна
+        this.view.style.borderRadius = '10px';
     }
 
     bookDetails(){
@@ -118,9 +125,9 @@ export class Book {
             //обозначаю эту книгу выданной
             if(this.library.reader !== null){
                 this.giveOutBook();
-                let successMessage = alert("You've added this book to yourself");
+                let successMessage = modalWin("Вы добавили эту книгу к себе");
             } else {
-                let errorMessage = alert('First, LOG IN to your account');
+                let errorMessage = modalWin('Сначала войдите в свою учетную запись');
             }
             baseDiv.remove();
         });
@@ -135,9 +142,9 @@ export class Book {
 
             if(this.library.reader !== null){
                 this.returnBook();
-                let successMessage = alert("You gave this book to the library");
+                let successMessage = modalWin("Вы вернули эту книгу в библиотеку");
             } else {
-                let errorMessage = alert('First, LOG IN to your account');
+                let errorMessage = modalWin('Сначала войдите в свою учетную запись');
             }
             baseDiv.remove();
         });
@@ -155,4 +162,7 @@ export class Book {
             baseDiv.remove();
         });
     }
+
+
 }
+

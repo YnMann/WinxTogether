@@ -2,6 +2,10 @@
     font-family: Century Gothic;
 }
 
+body {
+    background-color: #ffc0cb40;
+}
+
 .container {
     width: 1200px;
     height: 1200px;
@@ -20,13 +24,14 @@
 
 .left-menu div {
     height: 200px;
-    background-color: #DAA06D;
+    background-color: #f18b80;
     color: white;
     margin-bottom: 15px;
     text-align: center;
     font-size: 50px;
     line-height: 200px;
     cursor: pointer;
+    border-radius: 15px;
     transition: 200ms;
 }
 
@@ -48,14 +53,16 @@
     margin: 0 auto;
 }
 
-.trend-books, .search-result {
+.trend-books,
+.search-result,
+.give-out-books {
     margin: 0 auto;
     display: flex;
     padding-bottom: 40px;
     border-bottom: 2px grey dashed;
     flex-wrap: wrap;
     margin-bottom: 10px;
-    justify-content: space-between;
+    justify-content: flex-start;
 }
 
 .result {
@@ -79,9 +86,9 @@
     transform: translateX(20px);
 }
 
-.trend-book{
-    width: 164px;
-    height: 210px;
+.trend-book {
+    width: 165px;
+    height: 230px;
     margin: 3px;
     font-size: 12px;
     display: flex;
@@ -91,12 +98,14 @@
     text-align: center;
 }
 
-.trend-book img, .reader-review img {
+.trend-book img,
+.reader-review img {
     width: 155px;
-    height: 160px;
+    height: 180px;
+    border-radius: 6px;
 }
 
-.trend-book h2{  
+.trend-book h2 {
     font-size: 20px;
 }
 
@@ -140,13 +149,14 @@ td {
 }
 
 .btn {
-    border:none;
+    border: none;
     margin: 20px 30px;
-    font-weight:600;
-    color:#fff;
+    font-weight: 600;
+    color: #fff;
     font-size: 17px;
     padding: 10px;
-    background-color: #DAA06D;
+    background-color: #f18b80;
+    border-radius: 7px;
 }
 
 .for-buttons {
@@ -154,7 +164,8 @@ td {
     justify-content: space-evenly;
 }
 
-.for-buttons button, #registration{
+.for-buttons button,
+#registration {
     padding: 10px 140px;
 }
 
@@ -163,7 +174,7 @@ td {
     text-align: center;
     font-size: 18px;
     border: 2px solid #DAA06D;
-    border-radius:10px;
+    border-radius: 10px;
 }
 
 form {
@@ -185,7 +196,7 @@ label {
     margin: 10px 40px;
 }
 
-.reader{
+.reader {
     display: flex;
     flex-wrap: wrap;
     font-weight: 600;
@@ -224,7 +235,7 @@ label {
     display: block;
 }
 
-.readers-list, .give-out-books {
+.readers-list {
     margin: 10px auto;
     display: flex;
     padding-bottom: 40px;
@@ -244,4 +255,62 @@ label {
     padding: 10px;
     text-align: center;
     border: 3px solid #000;
+}
+
+.modalWin {
+    display: block;
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modalWin p {
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+    font-size: 25px;
+    font-weight: bold;
+    margin-top: 200px;
+    background: #b54848;
+    border-radius: 15px;
+    color: white;
+    padding: 20px;
+}
+
+.modalWinInp {
+    display: block;
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modalWinInp p {
+    width: 300px;
+    height: 230px;
+    margin: 0 auto;
+    font-size: 23px;
+    font-weight: bold;
+    margin-top: 200px;
+    background: #b54848;
+    border-radius: 15px;
+    color: white;
+    padding: 20px;
+}
+
+.modalWinInp input{
+    padding: 12px 76px;
+    margin-top: 10px;
+    border-radius: 10px;
+}
+
+.modalWinInp button{
+    padding: 12px 116px;
+    border-radius: 10px;
+    margin: 20px auto 0;
 }

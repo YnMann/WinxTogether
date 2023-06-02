@@ -1,4 +1,5 @@
 const log = console.log;
+import {modalWinPrompt} from "./modalWinPrompt.js";
 
 export class Reader {
 
@@ -144,32 +145,37 @@ export class Reader {
         return this.review;
     }
 
+    inputHandler1(value) {
+        this.avatarUrl = value;
+        this.sync();
+        log(this.tdAvatar)
+    }
+
+    inputHandler2(value) {
+        this.addres = value;
+        this.sync();
+    } 
+    
+    inputHandler3(value) {
+        this.phoneNum = value;
+        this.sync();
+    }
+
     //Меняю фото url
     changePhoto() {
-        let url = prompt('Enter the address of the photo: ');
-        if(url !== ''){
-            this.avatarUrl = url;
-            this.sync();
-        }else return;
+        let url = modalWinPrompt('Enter the address of the photo: ', this.inputHandler1.bind(this));
     };
 
     //Меняю адресс
     changeAddress() {
-        let addres = prompt('Enter your address: ');
-        if(addres !== ''){
-            this.address = addres;
-            this.sync();
-        }else return;
+        let addres = modalWinPrompt('Enter your address: ', this.inputHandler2.bind(this));
     };
 
     //Меняю номер телефона
     changePhoneNum() {
-        let phoneNumber = prompt('Enter your Phone number: ');
-        if(phoneNumber !== ''){
-            this.phoneNum = phoneNumber;
-            this.sync();
-        }else return;
-    };
+        let phoneNumber = modalWinPrompt('Enter your Phone number: ' , this.inputHandler3.bind(this));
+
+        };
 
     //Метод для добавления книг в список
     showReaderBooks(){
