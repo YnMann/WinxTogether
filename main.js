@@ -42,7 +42,9 @@ class Library {
 
     //Метод для входа существующего юзера
     logIn(id){
-
+        //Нахожу пользователя по айди в дате и вставляю его в див
+        this.divReader = this.userData[id].view;
+        this.pageReaderResult.append(this.divReader);
     }
 
     //Метод для выхода читателя из учетки
@@ -196,7 +198,7 @@ searchButton.addEventListener('click', () => {
     else library.search(text, divResult);
 });
 // Переход в окно регистрации
-let registShowButton = document.querySelector('#enter');
+let registShowButton = document.querySelector('#registr');
 let registrDiv = document.querySelector('.registr');
 registShowButton.addEventListener('click', () => {
     if (library.reader === null) {
@@ -218,4 +220,10 @@ registrBtn.addEventListener('click', () => {
     // Переношу полученную дату и регистрирую нового читателя в библиотеке
     library.newReader(data, divForReaderResult);
     registrDiv.classList.remove('active');
+});
+//Вход в существующую учетку по айди
+let logInBtn = document.querySelector('#enter');
+logInBtn.addEventListener('click', () => {
+    let id = +prompt('Enter Your Id');
+    library.logIn(id);
 });
