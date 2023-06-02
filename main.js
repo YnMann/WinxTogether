@@ -82,18 +82,17 @@ class Library {
         }
 
     //Метод для возврата книги
-    return(title, authors){
+    return(book){
         //У нас есть data с книгами которые недоступны/используются читателями.
         //Делаем перебор ДАТЫ чтобы просмотреть каждую книгу и сравнить с введенным названием и авторами
-        for(let book of this.giveOutBookData){
+        for(let i in this.giveOutBookData){
             //Когда находим совпадение
-            if(book.title === title && book.authors === authors){
+            if(this.giveOutBookData[i].title === book.title && this.giveOutBookData[i].authors === book.authors){
                 //У нашего пользователя также обнуляем свойства? Пока не знаю какие именно
                 //Одним словом Пользователь тоже вернул книгу
                 this.reader.removeBook(book);
                 //И удаляем книгу из нашей ДАТЫ, где хранится список недоступных книг
-                let index = this.giveOutBookData.indexOf(book);
-                this.giveOutBookData.slice(index, 1);
+                this.giveOutBookData.slice(i, 1);
             }
         }
         this.showGiveOutBooks(this.giveOutBooksShelf);

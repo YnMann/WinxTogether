@@ -54,11 +54,11 @@ export class Book {
 
     //Возвращение книги
     returnBook() {
-        //И ввожу в библиотеке ее в список выданных
-        this.library.return(this.title, this.authors);
         //Обнуляю все данные и через синхронизацию пометку Недоступна меняю на Доступно, т.к. книгу Вернули
         this.readerUrl = '';
         this.returnDate = null;
+        //И ввожу в библиотеке ее в список выданных
+        this.library.return(this);
         this.sync();
     }
 
@@ -117,7 +117,7 @@ export class Book {
 
             //обозначаю эту книгу выданной
             if(this.library.reader !== null){
-                this.giveOutBook(this.library.reader);
+                this.giveOutBook();
                 let successMessage = alert("You've added this book to yourself");
             } else {
                 let errorMessage = alert('First, LOG IN to your account');
@@ -135,7 +135,6 @@ export class Book {
 
             if(this.library.reader !== null){
                 this.returnBook();
-                this.library.return(this.title, this.authors);
                 let successMessage = alert("You gave this book to the library");
             } else {
                 let errorMessage = alert('First, LOG IN to your account');

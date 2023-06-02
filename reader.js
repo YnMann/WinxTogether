@@ -174,10 +174,9 @@ export class Reader {
 
     //Удаляю книгу из списка
     removeBook (book) {
-        for(let readerBook of this.listOfBooks){
-            if(readerBook == book){
-                let index = this.listOfBooks.indexOf(book);
-                this.listOfBooks.slice(index, 1);
+        for(let i in this.listOfBooks){
+            if(this.listOfBooks[i].title === book.title && this.listOfBooks[i].authors === book.authors){
+                this.listOfBooks.slice(i, 1);
             }
         }
     };
