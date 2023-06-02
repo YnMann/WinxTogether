@@ -199,8 +199,28 @@ export class Reader {
     //Добавляю книгу в свой список
     addBook(book) {
         this.listOfBooks.push(book);
+        log('list', this.listOfBooks)
+
+        let readerWithoutLib = {};
+        for (let i in this.listOfBooks) {
+            for (let j in this.listOfBooks[i]) {
+                if (j === 'library') continue;
+                else readerWithoutLib[j] = this.listOfBooks[i][j];
+            }
+        }
+        this.localStorage(readerWithoutLib);
+
+        // log('readerWIthoutLib11',readerWithoutLib)
+
         this.showReaderBooks();
         this.sync();
+    };
+
+    localStorage (obj) {
+        let serial = JSON.stringify(obj);
+        localStorage.setItem(obj.id, serial);
+        this.userLocalStorage = JSON.parse(localStorage.getItem(obj.id));
+        // log('UserLocladsa',this.userLocalStorage)
     };
 
     sync(){
