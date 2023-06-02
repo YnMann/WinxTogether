@@ -158,6 +158,7 @@ export class Reader {
             hTwo.textContent = 'There are no books in the list';
             this.tdListOfBooks.append(hTwo);
         } else {
+            this.tdListOfBooks.textContent = '';
             for(let book of this.listOfBooks){
                 this.tdListOfBooks.append(book.view);
             }
@@ -169,15 +170,17 @@ export class Reader {
         for(let i in this.listOfBooks){
             if(this.listOfBooks[i].title === book.title && this.listOfBooks[i].authors === book.authors){
                 this.listOfBooks.slice(i, 1);
-                sync();
+                this.sync();
             }
         }
+        this.showReaderBooks();
     };
 
     //Добавляю книгу в свой список
     addBook(book) {
         this.listOfBooks.push(book);
-        sync();
+        this.showReaderBooks();
+        this.sync();
     };
 
     addToMyList() {
@@ -192,6 +195,11 @@ export class Reader {
         //обновляю данные в дате библиотеки
         this.library.sync(this);
 
-        showReaderBooks();
+        if(this.listOfBooks.length !== 0){
+            for(let i in this.listOfBooks){
+                this.tdListOfBooks.textContent = '';
+                this.tdListOfBooks.append(this.listOfBooks[i].view);
+            }
+        }
     };
 }
